@@ -92,11 +92,11 @@ beta ver 1.9 :
 
 alias aws-cli="aws --version | cut -d ' ' -f1 "
 alias aws-list="cat ~/.aws/credentials | grep -o '\[[^]]*\]' | grep -Ev 'default' "
-alias aws-config='aws configure list
-alias aws-key='aws_profile; aws configure list; '
-alias aws-set='aws_set $1 ; '
-alias aws-clear='aws_clear; aws_profile; '
-alias aws-sts='aws sts get-caller-identity'
+alias aws-config="aws configure list"
+alias aws-key="aws_profile; aws configure list; "
+alias aws-set="aws_set $1"
+alias aws-clear="aws_clear; aws_profile; "
+alias aws-sts="aws sts get-caller-identity"
 
 aws_set ${DEFAULT_PF} ;
 
