@@ -9,8 +9,9 @@
 > aws --version(aws-cli 2.x ) : V1 사용시 삭제 후 V2로 셋업필요
 
 TEST 환경
-> amazon-linux2 ...
-> macOS 13.0.1 ...
+> amazon-linux2
+> macOS 13.0.1
+
 -------------------------------------
 macOS 의 경우 아래 추가셋업 필요 :
 
