@@ -34,9 +34,9 @@
 ### ? step5. using alias ( ex> aws-set or aws-key or aws-clear or aws-cli ... ETC. ) 
 
 ##################################################################################################################################################################################################################################################################################################
-# git tag v1.2.9 / git push origin schan / master ( git config --local user.name "schan90" / git config --local user.email "qnas90@gmail.com" )
+# git tag v1.3.0 / git push origin schan / master ( git config --local user.name "schan90" / git config --local user.email "qnas90@gmail.com" )
 # git pull both HEAD / git push both HEAD  
-swtr_ver="v1.2.9"
+swtr_ver="v1.3.0"
 ############ init for AWS credentials & config ##########
 # 디폴트 프로파일 및 주요 변수 초기화
 DEFAULT_PF="mz"              ### 원하는 디폴트 프로파일로 수정해서 사용 ###
@@ -51,11 +51,11 @@ export blue="\e[1;34m"  purple="\e[1;35m" cyan="\e[1;36m" reset="\e[m" ;
 
 pf_msg()
 { 
-  notset_chkr=$( echo $(aws configure list | grep 'profile' | grep '<not set>'|xargs|cut -d ' ' -f2) );
-  default_chkr=$( echo $(aws configure list | grep 'profile' | grep "${DEFAULT_PF}"|xargs|cut -d ' ' -f2) );
-  [[ "${notset_chkr}" == '<not' ]] && { echo "Using < DEFAULT > AWS-KEY... BUT, NOT using Custom PROFILE : < NOT SET >" ; return 0 ; } ;
-  [[ "${default_chkr}" == "${DEFAULT_PF}" ]] && { echo "Using ${cyan}[DEFAULT]${reset} AWS-PROFILE...! ${grey}<${swtr_ver}>${reset}" ; return 0 ; }
-  { echo "Using ${blue}[${AWS_PROFILE}]${reset} AWS-PROFILE as DEFAULT you Switched...! ${grey}[${swtr_ver}]${reset}" ; } ;
+  notset_chkr=$( echo -e $(aws configure list | grep 'profile' | grep '<not set>'|xargs|cut -d ' ' -f2) );
+  default_chkr=$( echo -e $(aws configure list | grep 'profile' | grep "${DEFAULT_PF}"|xargs|cut -d ' ' -f2) );
+  [[ "${notset_chkr}" == '<not' ]] && { echo -e "Using < DEFAULT > AWS-KEY... BUT, NOT using Custom PROFILE : < NOT SET >" ; return 0 ; } ;
+  [[ "${default_chkr}" == "${DEFAULT_PF}" ]] && { echo -e "Using ${cyan}[DEFAULT]${reset} AWS-PROFILE...! ${grey}<${swtr_ver}>${reset}" ; return 0 ; }
+  { echo -e "Using ${blue}[${AWS_PROFILE}]${reset} AWS-PROFILE as DEFAULT you Switched...! ${grey}[${swtr_ver}]${reset}" ; } ;
 
 }
 # 프로파일 현황 체크함수 정의
@@ -65,9 +65,9 @@ aws_profile()
     pf_msg ;
   elif [[ $(aws configure get default.region) != "cleared-region" ]]; then
     pf_msg ; 
-    # echo "Using < Default > AWS-PROFILE ..."
+    # echo -e "Using < Default > AWS-PROFILE ..."
   else
-    echo "${yellow}None AWS-PROFILE ... ${reset}"
+    echo -e "${yellow}None AWS-PROFILE ... ${reset}"
   fi
 }
 
@@ -84,7 +84,7 @@ numlist_profile()
   done <<< "$ENTITIES"
   ((SELECTION--)) ;
 
-  echo
+  echo -e
   printf 'SELECT the AWS-KEY-PROFILE you want from the above list: '
   read -r opt
   if [[ ${opt} == "" || ${#opt} == 0 ]]; then
@@ -94,19 +94,19 @@ numlist_profile()
   else
     echo -e "WRONG NUMBER OR INVAILD INPUT, BYE~!\n" ; PF_flag=false ; return 0 ;
   fi
-  [[ ${NOINPUT_flag} != true ]] && { PF=$( echo "${PF:1}"|cut -d ']' -f1 ) ; } || { PF=${DEFAULT_PF} ; NOINPUT_flag=false ; } 
-  # echo "##### ${opt} &&&& ${PF} ###### "
+  [[ ${NOINPUT_flag} != true ]] && { PF=$( echo -e "${PF:1}"|cut -d ']' -f1 ) ; } || { PF=${DEFAULT_PF} ; NOINPUT_flag=false ; } 
+  # echo -e "##### ${opt} &&&& ${PF} ###### "
 }
 
 asking_pf()
 {
-  echo -n "
-which AWS-PROFILE do you want? : 
+  echo -en "
+Which AWS-PROFILE do you want? : 
 
 "
   numlist_profile ;
   [[ ${PF_flag} == false ]] && { return 0 ; }
-  echo -n "
+  echo -en "
 ${yellow}in precessing ... wait for a while ... ${reset}
 
 "
@@ -132,7 +132,7 @@ aws_set()
   local pf=""; selc_pf="" ; 
   [[ "$1" == "" ]] && { asking_pf; pf="${selc_pf}"; } || pf="$1" ;
   [[ $( cat ~/.aws/credentials | grep "\[${pf}\]" ) ]] && { aws_clear; export AWS_PROFILE="${pf}"; aws_set::conf "${pf}"; } \
-  || { echo -e "\n ***** ${yellow}INVALID PROFILE or DEFAULT set & Cleared PROFILE~!${reset} ***** "; aws_clear ; return 0 ;  }
+  || { echo -e -e "\n ***** ${yellow}INVALID PROFILE or DEFAULT set & Cleared PROFILE~!${reset} ***** "; aws_clear ; return 0 ;  }
   pf=""; PF="" ; PF_flag=false ;
 
   pf_msg;
