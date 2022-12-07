@@ -53,6 +53,9 @@ AWS-CLI V2 profile 환경변수 및 set command & ETC ...
 ```
 ## Release-history  :
 ```
+V1.3.2: 
+Added> displaying current-profile when aws-set step
+
 V1.2.7: 
 Added> ReadME &Ver-display &ETC.
 
@@ -104,5 +107,3 @@ aws_set ${DEFAULT_PF} ;
 
 ```
 ![aws-profile-swt4](https://user-images.githubusercontent.com/6235318/205489690-c2bda6bc-285e-4fd6-8496-d2a18c9540a5.png)
-
-
