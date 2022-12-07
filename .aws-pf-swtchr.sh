@@ -34,9 +34,9 @@
 ### ? step5. using alias ( ex> aws-set or aws-key or aws-clear or aws-cli ... ETC. ) 
 
 ##################################################################################################################################################################################################################################################################################################
-# git tag v1.3.0 / git push origin schan / master ( git config --local user.name "schan90" / git config --local user.email "qnas90@gmail.com" )
+# git tag v1.3.2 / git push origin schan / master ( git config --local user.name "schan90" / git config --local user.email "qnas90@gmail.com" )
 # git pull both HEAD / git push both HEAD  
-swtr_ver="v1.3.0"
+swtr_ver="v1.3.2"
 ############ init for AWS credentials & config ##########
 # 디폴트 프로파일 및 주요 변수 초기화
 DEFAULT_PF="mz"              ### 원하는 디폴트 프로파일로 수정해서 사용 ###
@@ -77,9 +77,13 @@ numlist_profile()
 { 
   SELECTION=1
   ENTITIES=$(printf "%s\n" "${list_AWS_PROFILE[@]}") ;
+  current_profile=$(echo ${AWS_PROFILE} |xargs);
+  # echo "  ${ENTITIES[@]} " ;
 
   while read -r line; do
-    echo -e "${red}$SELECTION)${reset} ${green}${line}${reset}"
+    # echo " -- ${line} --"
+    [[ ${line} == "[${current_profile}]" ]] && { echo -e "${red}$SELECTION)${reset} ${green}${line}${reset} ${yellow}     <= current-profile ( using now ) ${reset}" ;} \
+    || { echo -e "${red}$SELECTION)${reset} ${green}${line}${reset}" ;}
     ((SELECTION++))
   done <<< "$ENTITIES"
   ((SELECTION--)) ;
