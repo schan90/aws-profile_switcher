@@ -107,3 +107,5 @@ aws_set ${DEFAULT_PF} ;
 
 ```
 ![aws-profile-swt4](https://user-images.githubusercontent.com/6235318/205489690-c2bda6bc-285e-4fd6-8496-d2a18c9540a5.png)
+![v1 3 2-showing-current](https://user-images.githubusercontent.com/6235318/206255147-f016202c-61dc-47af-876e-3b70986eba31.png)
+
