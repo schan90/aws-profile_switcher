@@ -54,7 +54,7 @@ AWS-CLI V2 profile 환경변수 및 set command & ETC ...
 ## Release-history  :
 ```
 V1.3.2: 
-Added> displaying current-profile when aws-set step
+Added> displaying current-profile, when aws-set step
 
 V1.2.7: 
 Added> ReadME &Ver-display &ETC.
