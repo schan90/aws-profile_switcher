@@ -51,7 +51,7 @@ AWS-CLI V2 profile 환경변수 및 set command & ETC ...
 ### step4. restart shell ( exec bash OR exec zsh )
 ### step5. using alias ( ex> aws-set or aws-key or aws-clear or aws-cli 등등 ... ) 
 ```
-## Release-history  :
+## RELEASE-HISTORY  :
 
 ```
 V1.3.3: 
