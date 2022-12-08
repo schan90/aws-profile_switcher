@@ -52,7 +52,11 @@ AWS-CLI V2 profile 환경변수 및 set command & ETC ...
 ### step5. using alias ( ex> aws-set or aws-key or aws-clear or aws-cli 등등 ... ) 
 ```
 ## Release-history  :
+
 ```
+V1.3.3: 
+Added> Showing-current-profile, when aws-set step
+
 V1.3.2: 
 Added> displaying current-profile, when aws-set step
 
