@@ -34,16 +34,18 @@
 ### ? step5. using alias ( ex> aws-set or aws-key or aws-clear or aws-cli ... ETC. ) 
 
 ##################################################################################################################################################################################################################################################################################################
-# git tag v1.3.3 / git push origin schan / master ( git config --local user.name "schan90" / git config --local user.email "qnas90@gmail.com" )
+# git tag v1.3.4 / git push origin schan / master ( git config --local user.name "schan90" / git config --local user.email "qnas90@gmail.com" )
 # git pull both HEAD / git push both HEAD  
-swtr_ver="v1.3.3"
+swtr_ver="v1.3.4"
 ############ init for AWS credentials & config ##########
 # 디폴트 프로파일 및 주요 변수 초기화
 DEFAULT_PF="mz"              ### 원하는 디폴트 프로파일로 수정해서 사용 ###
-PF="" ; KID="" ; KSEC="" ; RG="" ; PF_flag=false; NOINPUT_flag=false; 
+PF="" ; KID="" ; KSEC="" ; RG="" ; PF_flag=false; NOACT_flag=false;  
+# PFDF_flag=false; 
 
 # 키 값 조회 후 해당 값 리스트 배열 생성 및 반복 메세지 함수 생성
 list_AWS_PROFILE=( $(cat ~/.aws/credentials | grep -o '\[[^]]*\]' | grep -Ev 'default'| xargs) ) ;
+current_pf(){ current_profile=$(echo ${AWS_PROFILE} |xargs); } ;
 
 # ansi color code; cmd 차일드 프로세스에서 사용할 컬러 하이라이팅 코드 값 export 처리
 export red="\e[1;31m" green="\e[1;32m"  yellow="\e[1;33m" grey="\e[0;37m" ;
@@ -77,13 +79,10 @@ numlist_profile()
 { 
   SELECTION=1
   ENTITIES=$(printf "%s\n" "${list_AWS_PROFILE[@]}") ;
-  current_profile=$(echo ${AWS_PROFILE} |xargs);
+  current_pf ;
   # echo "  ${ENTITIES[@]} " ;
 
   while read -r line; do
-    # echo " -- ${line} --"
-    # [[ ${line} == "[${current_profile}]" ]] && { echo -e "${red}$SELECTION)${reset} ${green}${line}${reset} ${yellow}     <= current-profile ( using now ) ${reset}" ;} \
-    # || { echo -e "${red}$SELECTION)${reset} ${green}${line}${reset}" ;}
     [[ ${line} == "[${current_profile}]" ]] && { echo -e "${yellow}$SELECTION) ${line}    <= current-profile ( using now ) ${reset}" ;} \
     || { echo -e "${red}$SELECTION)${reset} ${green}${line}${reset}" ;}
     ((SELECTION++))
@@ -91,32 +90,56 @@ numlist_profile()
   ((SELECTION--)) ;
 
   echo -e
-  printf 'SELECT the AWS-KEY-PROFILE you want from the above list: '
+  echo -e "SELECT the AWS-KEY-PROFILE you want from the above list " 
+  printf "${cyan}( IF just ENTER, KEEP the CURRENT OR Select NUM '0' Switching to DEFAULT~! )${reset} : "
   read -r opt
+
   if [[ ${opt} == "" || ${#opt} == 0 ]]; then
-    echo -e "${red}You just Entered So NO INVAILD INPUT, Using Default-PROFILE~!${reset} \n" ; PF_flag=true ; NOINPUT_flag=true ;
+    [[ "${current_profile}" != "" ]] && { 
+      echo -e "
+${yellow}Keep the CURRENT. Nothing to New~!${reset} \n" ; 
+    PF="[${current_profile}]" ; PF_flag=false ; NOACT_flag=true ; return 0 ; 
+    } || { 
+      echo -e "
+${red}None Profile Using, So Switching to Default-PROFILE~!${reset} \n" ; 
+    PF="[${DEFAULT_PF}]" ; PF_flag=true ; 
+    }
+
+  elif [[ ${opt} == "0" ]]; then
+    echo -e "
+${red}Switching to Default-PROFILE~!${reset} \n" ; PF="[${DEFAULT_PF}]" ; PF_flag=true ; 
+
   elif [[ $(seq 1 $SELECTION) =~ $opt ]]; then
-    selcted=$( sed -n "${opt}p" <<< "$ENTITIES" ); PF=${selcted} ; PF_flag=true ;
+    selcted=$( sed -n "${opt}p" <<< "$ENTITIES" ); [[ ${selcted} == "[${current_profile}]" ]] && { 
+      echo -e "
+${red}Same as Current Profile. Nothing to Change~ Bye~!${reset} \n" ; 
+      PF="[${current_profile}]" ; PF_flag=false ; NOACT_flag=true ; 
+      return 0 ; 
+      } || { 
+        PF=${selcted} ; PF_flag=true ; }
+
   else
-    echo -e "WRONG NUMBER OR INVAILD INPUT, BYE~!\n" ; PF_flag=false ; return 0 ;
+    echo -e "
+${red}WRONG NUMBER OR INVAILD INPUT, BYE~!${reset}\n" ; 
+    PF_flag=false ; NOACT_flag=true ; PF="" ; return 0 ;
   fi
-  [[ ${NOINPUT_flag} != true ]] && { PF=$( echo -e "${PF:1}"|cut -d ']' -f1 ) ; } || { PF=${DEFAULT_PF} ; NOINPUT_flag=false ; } 
+
   # echo -e "##### ${opt} &&&& ${PF} ###### "
 }
 
 asking_pf()
 {
-  echo -en "
-Which AWS-PROFILE do you want? : 
+  current_pf ;
+  [[ ${current_profile} == "" ]] && { echo -e "\nWhich AWS-PROFILE do you want? ${yellow}(no current-profile)${reset} : \n" ;} || \
+  { echo -e "\nWhich AWS-PROFILE do you want? : \n";}
 
-"
-  numlist_profile ;
-  [[ ${PF_flag} == false ]] && { return 0 ; }
-  echo -en "
+  numlist_profile ; 
+  [[ ${PF_flag} == true ]] && { PF=$( echo -e "${PF:1}"|cut -d ']' -f1 ) ; selc_pf="${PF}" ; PF_flag=false ; PF="" ; } || { return 0 ; } ;
+  # echo -e "##### ${selc_pf} &&&& ${PF} ######"
+
+  echo -e "
 ${yellow}in precessing ... wait for a while ... ${reset}
-
 "
-  [[ "${PF}" == "" ]] && { return 0 ; } || selc_pf="${PF}" ;
 
 }
 
@@ -124,6 +147,7 @@ ${yellow}in precessing ... wait for a while ... ${reset}
 #  프로파일 변경 및  해당 프로파일을  디폴트로 설정
 aws_set::conf()
 {
+  # echo -e "& $@ &" 
   KID=$(aws configure get ${1}.aws_access_key_id )
   KSEC=$(aws configure get ${1}.aws_secret_access_key)
   RG=$(aws configure get ${1}.region)
@@ -135,12 +159,17 @@ aws_set::conf()
 # 프로파일 유효성 검증 
 aws_set()
 {
-  local pf=""; selc_pf="" ; 
-  [[ "$1" == "" ]] && { asking_pf; pf="${selc_pf}"; } || pf="$1" ;
-  [[ $( cat ~/.aws/credentials | grep "\[${pf}\]" ) ]] && { aws_clear; export AWS_PROFILE="${pf}"; aws_set::conf "${pf}"; } \
-  || { echo -e -e "\n ***** ${yellow}INVALID PROFILE or DEFAULT set & Cleared PROFILE~!${reset} ***** "; aws_clear ; return 0 ;  }
-  pf=""; PF="" ; PF_flag=false ;
+  pf=""; 
+  # selc_pf="" ; 
+  [[ "$1" == "" ]] && { asking_pf; pf="${selc_pf}"; selc_pf="" ; } || pf="$1" ;
+  # echo "+++ ${pf} +++" ;
+  [[ "${NOACT_flag}" == true ]] && { NOACT_flag=false; return 0 ; } ;
 
+  [[ $( cat ~/.aws/credentials | grep "\[${pf}\]" ) ]] && { aws_clear; export AWS_PROFILE="${pf}"; aws_set::conf "${pf}"; } \
+  || { echo -e "\n ***** ${yellow}INVALID PROFILE or DEFAULT set & Cleared PROFILE~!${reset} ***** "; aws_clear ; return 0 ;  }
+  # echo -e "&&&& ${pf} &&&&&&"
+  # PFDF_flag=false ; 
+  pf="";  PF="" ;
   pf_msg;
 }
 
@@ -156,10 +185,14 @@ aws_clear::conf()
   ### for mac-bash gnu-sed
   ## https://medium.com/@bramblexu/install-gnu-sed-on-mac-os-and-set-it-as-default-7c17ef1b8f64
   sed -i '/default_/d' ~/.aws/config ; 
+  current_pf ; PF=${current_profile} ;
 
-  aws configure get ${PF}.aws_access_key_id | xargs -I {} aws configure set {} '' --profile ${PF} ;
-  aws configure get ${PF}.aws_secret_access_key | xargs -I {} aws configure set {} '' --profile ${PF} ;
-  aws configure set default.region "cleared-region" ; PF="" ;
+  [[ "${PF}" != "" ]] && {
+    aws configure get ${PF}.aws_access_key_id | xargs -I {} aws configure set {} '' --profile ${PF} ;
+    aws configure get ${PF}.aws_secret_access_key | xargs -I {} aws configure set {} '' --profile ${PF} ;
+    aws configure set default.region "cleared-region" ; PF="" ;
+  }
+
 }
 
 aws_clear()
