@@ -54,6 +54,9 @@ AWS-CLI V2 profile 환경변수 및 set command & ETC ...
 ## RELEASE-HISTORY  :
 
 ```
+V1.3.5: 
+fixed unnecessary default loading.
+
 V1.3.4: 
 Added> On the aws-set step, smart checking current when just enter key or selected number using current.
 
@@ -115,4 +118,4 @@ aws_set ${DEFAULT_PF} ;
 ```
 ![aws-profile-swt4](https://user-images.githubusercontent.com/6235318/205489690-c2bda6bc-285e-4fd6-8496-d2a18c9540a5.png)
 
-![aws-profile-swt5](https://media.cleanshot.cloud/media/45111/6MnPpk8yrW6aeg6C0aE4kMECKfZh3Ia9BWMQKVlB.jpeg?Expires=1670706462&Signature=DVznq-kA7TV0qaRJ5BGYyArisZDgdvqf~lZJrr1NjzeczZKVz-Wwt-qANP2a6xqWYwY6yYmdctYdL3gfis3A4nSqZKPGP3n9CUXW9eiRh7hRm1UdjeLxE0RHBPU-Rba-fmEx5sCpHFvFc5LWbvPDtirEPvo--YnStDPZqkBkzY4EZDFpTbTJFySVCmoKmRfKIbbQlwrjgLNvgYB76AReLPrRMAQLhN-jaUoMbYbQ2tlVwaTX5NGXmgHs6Kx-gf34x~lKxMGgiWtHBUo1JMIIUY7xXxSoUbUm-SsLRphcYaJ74taRRnbX1EUEInDcO5jYougdxgYcZYwrek~Kb-mVsg__&Key-Pair-Id=K269JMAT9ZF4GZ)
+![aws-profile-swt5](./aws-profile-swt5.jpeg)
