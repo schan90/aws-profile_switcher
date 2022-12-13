@@ -34,9 +34,9 @@
 ### ? step5. using alias ( ex> aws-set or aws-key or aws-clear or aws-cli ... ETC. ) 
 
 ##################################################################################################################################################################################################################################################################################################
-# git tag v1.3.4 / git push origin schan / master ( git config --local user.name "schan90" / git config --local user.email "qnas90@gmail.com" )
+# git tag v1.3.5 / git push origin schan / master ( git config --local user.name "schan90" / git config --local user.email "qnas90@gmail.com" )
 # git pull both HEAD / git push both HEAD  
-swtr_ver="v1.3.4"
+swtr_ver="v1.3.5"
 ############ init for AWS credentials & config ##########
 # 디폴트 프로파일 및 주요 변수 초기화
 DEFAULT_PF="mz"              ### 원하는 디폴트 프로파일로 수정해서 사용 ###
@@ -210,6 +210,8 @@ alias aws-set="aws_set $1"
 alias aws-clear="aws_clear; aws_profile; "
 alias aws-sts="aws sts get-caller-identity"
 
-aws_set ${DEFAULT_PF} ;
+
+current_pf ;
+[[ "${current_profile}" != "${DEFAULT_PF}" ]] && { aws_set ${DEFAULT_PF} ; }
 
 ############### END ################################################
