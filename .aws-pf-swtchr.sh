@@ -34,29 +34,31 @@
 ### ? step5. using alias ( ex> aws-set or aws-key or aws-clear or aws-cli ... ETC. ) 
 
 ##################################################################################################################################################################################################################################################################################################
-# git tag v1.3.5 / git push origin schan / master ( git config --local user.name "schan90" / git config --local user.email "qnas90@gmail.com" )
+# git tag v1.3.6 / git push origin schan / master ( git config --local user.name "schan90" / git config --local user.email "qnas90@gmail.com" )
 # git pull both HEAD / git push both HEAD  
-swtr_ver="v1.3.5"
-############ init for AWS credentials & config ##########
+swtr_ver="v1.3.6"
+############ init for AWS credentials & config #######################################################################################################################################################################################################################################################
 # 디폴트 프로파일 및 주요 변수 초기화
-DEFAULT_PF="mz"              ### 원하는 디폴트 프로파일로 수정해서 사용 ###
-PF="" ; KID="" ; KSEC="" ; RG="" ; PF_flag=false; NOACT_flag=false;  
-# PFDF_flag=false; 
-
-# 키 값 조회 후 해당 값 리스트 배열 생성 및 반복 메세지 함수 생성
-list_AWS_PROFILE=( $(cat ~/.aws/credentials | grep -o '\[[^]]*\]' | grep -Ev 'default'| xargs) ) ;
-current_pf(){ current_profile=$(echo ${AWS_PROFILE} |xargs); } ;
+# DEFAULT_PF=""              ### 원하는 디폴트 프로파일로 수정해서 사용 ###
+DEFAULT_PF=$( cat ~/dft.txt 2> /dev/null )    ### 디폴트 프로파일 데이터파일 로딩 없을시, 실행시 인풋받아 데이터파일 생성  ###
+pfchkr(){ [[ $( cat ~/.aws/credentials | grep "\[${1}\]" ) ]] && { pfck_flag=true; } ; } ;
+###################################################################################################################################################################################################################################################################################################
+PF="" ; KID="" ; KSEC="" ; RG="" ; PF_flag=false; NOACT_flag=false; pfck_flag=false;
 
 # ansi color code; cmd 차일드 프로세스에서 사용할 컬러 하이라이팅 코드 값 export 처리
 export red="\e[1;31m" green="\e[1;32m"  yellow="\e[1;33m" grey="\e[0;37m" ;
 export blue="\e[1;34m"  purple="\e[1;35m" cyan="\e[1;36m" reset="\e[m" ;
 
+# 키 값 조회 후 해당 값 리스트 배열 생성 및 반복 메세지 함수 생성
+list_AWS_PROFILE=( $(cat ~/.aws/credentials | grep -o '\[[^]]*\]' | grep -Ev 'default'| xargs) ) ;
+current_pf(){ current_profile=$(echo ${AWS_PROFILE} |xargs); } ;
+
 pf_msg()
 { 
-  notset_chkr=$( echo -e $(aws configure list | grep 'profile' | grep '<not set>'|xargs|cut -d ' ' -f2) );
-  default_chkr=$( echo -e $(aws configure list | grep 'profile' | grep "${DEFAULT_PF}"|xargs|cut -d ' ' -f2) );
-  [[ "${notset_chkr}" == '<not' ]] && { echo -e "Using < DEFAULT > AWS-KEY... BUT, NOT using Custom PROFILE : < NOT SET >" ; return 0 ; } ;
-  [[ "${default_chkr}" == "${DEFAULT_PF}" ]] && { echo -e "Using ${cyan}[DEFAULT]${reset} AWS-PROFILE...! ${grey}<${swtr_ver}>${reset}" ; return 0 ; }
+  # notset_chkr=$( echo -e $(aws configure list | grep 'profile' | grep '<not set>'|xargs|cut -d ' ' -f2) );
+  notset_chkr=$(aws configure list | grep 'profile' | grep '<not set>'|xargs|cut -d ' ' -f2) ;
+  [[ "${notset_chkr}" == '<not' ]] && { echo -e "NOT using Custom PROFILE : < NOT SET >" ; return 0 ; } ;
+  [[ "${AWS_PROFILE}" == "${DEFAULT_PF}" ]] && { echo -e "Using ${cyan}[DEFAULT:${DEFAULT_PF}]${reset} AWS-PROFILE NOW...! ${grey}<${swtr_ver}>${reset}" ; return 0 ; }
   { echo -e "Using ${blue}[${AWS_PROFILE}]${reset} AWS-PROFILE as DEFAULT you Switched...! ${grey}[${swtr_ver}]${reset}" ; } ;
 
 }
@@ -211,7 +213,37 @@ alias aws-clear="aws_clear; aws_profile; "
 alias aws-sts="aws sts get-caller-identity"
 
 
+pfchkr ${DEFAULT_PF} ;
+# echo " pfchkr:  ${pfck_flag} " ;
+
+ckprof()
+{ 
+  echo
+  COLUMNS=12 ;
+  echo -e "${yellow}##########################################${reset}"
+  echo -e "${yellow}Tell me DEFAULT-PROFILE you want~! : ${reset}" ;
+  # PS3="Tell me DEFAULT-PROFILE you want~! : " ;
+  echo
+  select profile_aws in ${list_AWS_PROFILE[@]}; do
+    echo -e "${cyan}Selected NUM: < ${REPLY} > & Selected PROFILE: < ${profile_aws} >${reset}" ; break ;
+  done
+}
+
+# echo "pf-flg : ${pfck_flag}" ;
+if [[ ${pfck_flag} != true ]]; then
+  ckprof ; dfp=$( echo -e "${profile_aws:1}"|cut -d ']' -f1 ) ; pfchkr ${dfp};
+  # echo "##pf-flg : ${pfck_flag}" ; 
+  [[ "${pfck_flag}" == true ]] && { 
+    $( echo "${dfp}" > ~/dft.txt ) ; DEFAULT_PF=$(cat ~/dft.txt 2> /dev/null) ; } \
+  || { echo -e "${red}Invaild profile~! Asking repeat~${reset}" ; ckprof ;}
+fi
+
+# echo "***${DEFAULT_PF}" ;
+
 current_pf ;
-[[ "${current_profile}" != "${DEFAULT_PF}" ]] && { aws_set ${DEFAULT_PF} ; }
+[[ "${DEFAULT_PF}" != "" ]] && {
+  [[ "${DEFAULT_PF}" != "${current_profile}" ]] && { aws_set ${DEFAULT_PF} ; } ; 
+  }
+
 
 ############### END ################################################
