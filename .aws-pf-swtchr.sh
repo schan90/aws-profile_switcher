@@ -25,14 +25,6 @@
 #   - macOS 13.0 ventura
 #   - amazon-linux2 
 # 
-# How to install ( USAGE ) :
-#
-### ? step1. get this bash script ( ex> curl -LOs https://< bash-script 주소 > )
-### ? step2. give exec & write permission & move this script to your home path ( ex> chmod 755 .aws-pf-swtchr.sh && mv .aws-pf-swtchr.sh ~/.aws-pf-swtchr.sh )
-### ? step3. loading script in bashrc or zshrc ( ex> echo 'source ~/.aws-pf-swtchr.sh' >> ~/.bashrc OR echo 'source ~/.aws-pf-swtchr.sh' >> ~/.zshrc )
-### ? step4. restart shell ( exec bash OR exec zsh )
-### ? step5. using alias ( ex> aws-set or aws-key or aws-clear or aws-cli ... ETC. ) 
-
 ##################################################################################################################################################################################################################################################################################################
 # git tag v1.3.6 / git push origin schan / master ( git config --local user.name "schan90" / git config --local user.email "qnas90@gmail.com" )
 # git pull both HEAD / git push both HEAD  
