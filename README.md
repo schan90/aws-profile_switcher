@@ -54,6 +54,9 @@ AWS-CLI V2 profile 환경변수 및 set command & ETC ...
 ## RELEASE-HISTORY  :
 
 ```
+V1.3.6: 
+Default external loading & display imprv.
+
 V1.3.5: 
 fixed unnecessary default loading.
 
@@ -98,7 +101,7 @@ beta ver 1.9 :
 # 실행 권한 부여 후 파일경로를 ~/ 위치 후 아래와 같이 rc 환경파일 마지막 라인에 추가하여 쉘 실행시 로딩하여 사용
 # 1. chmod 755 .aws-pf-swtchr.sh && mv .aws-pf-swtchr.sh ~/.aws-pf-swtchr.sh
 # 2. echo 'source ~/.aws-pf-swtchr.sh' >> ~/.bashrc OR echo 'source ~/.aws-pf-swtchr.sh' >> ~/.zshrc (범용 리눅스 환경 : amazon-linux2 기준)
-# 3. exec bash OR exec zsh ( 쉘 재실행 ) 
+# 3. source ~/.bashrc OR source ~/.zshrc ( 쉘 재실행 및  쉘 환경파일 로딩 ) 
 # 4. 아래 alias 사용하여 기능 실행 (ex> aws-set or aws-key or aws-clear or aws-cli 등등 ... )
 
 ############### alias & sub-main : 아래 alias cmd 로 주요기능 실행 #####경##########
@@ -116,6 +119,17 @@ aws_set ${DEFAULT_PF} ;
 ############### END ################################################
 
 ```
+
+### First SETUP 시 Default profile 설정:
+step1: 
+아래 이미지 처럼 쉘 환경파일 로딩 후, 사전에 설정된 프로파일 중 원하는 걸로 선택~!
+source ~/.bashrc OR source ~/.zshrc
+
+step2: 
+aws-key cmd 통해 설정된 프로파일 정보 확인
+
+![first-profile-set](./cap3-v1.3.6.png)
+
 ![aws-profile-swt4](https://user-images.githubusercontent.com/6235318/205489690-c2bda6bc-285e-4fd6-8496-d2a18c9540a5.png)
 
 ![aws-profile-swt5](./aws-profile-swt5.jpeg)
