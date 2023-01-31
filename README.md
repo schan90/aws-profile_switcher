@@ -45,15 +45,37 @@ AWS-CLI V2 profile 환경변수 및 set command & ETC ...
 ## How to install :
 
 ```
-### step1. get this bash script ( ex> curl -LOs https://< bash-script 주소 > )
-### step2. give exec & write permission & move this script to your home path ( ex> chmod 755 .aws-pf-swtchr.sh && mv .aws-pf-swtchr.sh ~/.aws-pf-swtchr.sh )
-### step3. loading script in bashrc or zshrc ( ex> echo 'source ~/.aws-pf-swtchr.sh' >> ~/.bashrc OR echo 'source ~/.aws-pf-swtchr.sh' >> ~/.zshrc )
-### step4. restart shell ( source ~/.bashrc OR source ~/.zshrc )
-### step5. using alias ( ex> aws-set or aws-key or aws-clear or aws-cli 등등 ... ) 
+
+### step1. get this tool download.
+  ex> git clone <git-source>
+
+### step2. backup aws config file
+  ex> cp ~/.aws/config ~/.aws/config-bk
+
+### step3. give exec & write permission & copy this script to your path 
+  1st $> chmod 755 .aws-pf-swtchr.sh && chmod 755 awscf_reset.sh 
+  2nd $> cp awscf_reset.sh ~/.aws/awscf_reset.sh && cp .aws-pf-swtchr.sh ~/.aws-pf-swtchr.sh 
+
+### step4. loading script in bashrc or zshrc 
+  1st $> echo 'pushd ~/.aws > /dev/null && { command -- ./awscf_reset.sh ;} ;' >> ~/.bashrc 
+    OR echo 'pushd ~/.aws > /dev/null && { command -- ./awscf_reset.sh ;} ;' >> ~/.zshrc
+
+  2nd $> echo 'popd > /dev/null 2> /dev/null ;' >> ~/.bashrc 
+    OR echo 'popd > /dev/null 2> /dev/null ;' >> ~/.zshrc
+
+  3rd $> echo 'source ~/.aws-pf-swtchr.sh ;' >> ~/.bashrc 
+    OR echo 'source ~/.aws-pf-swtchr.sh ;' >> ~/.zshrc
+
+### step5. restart shell 
+  ex) source ~/.bashrc OR source ~/.zshrc
+
 ```
 ## RELEASE-HISTORY  :
 
 ```
+V1.3.7
+Added AWS-CONFIG auto reset-script for fixing parse error.
+
 V1.3.6: 
 Default external loading & display imprv.
 
@@ -97,14 +119,8 @@ beta ver 1.9 :
 ## Usage :
 
 ```
-###  ~/.bashrc or ~/.zshrc ( 쉘 환경파일에서 로딩 : source ~/.aws-pf-swtchr.sh)
-# 실행 권한 부여 후 파일경로를 ~/ 위치 후 아래와 같이 rc 환경파일 마지막 라인에 추가하여 쉘 실행시 로딩하여 사용
-# 1. chmod 755 .aws-pf-swtchr.sh && mv .aws-pf-swtchr.sh ~/.aws-pf-swtchr.sh
-# 2. echo 'source ~/.aws-pf-swtchr.sh' >> ~/.bashrc OR echo 'source ~/.aws-pf-swtchr.sh' >> ~/.zshrc (범용 리눅스 환경 : amazon-linux2 기준)
-# 3. source ~/.bashrc OR source ~/.zshrc ( 쉘 재실행 및  쉘 환경파일 로딩 ) 
-# 4. 아래 alias 사용하여 기능 실행 ( ex> aws-set or aws-key or aws-clear or aws-cli 등등 ... )
 
-############### alias & sub-main : 아래 alias cmd 로 주요기능 실행 #####경##########
+############### alias & sub-main : 아래 alias cmd 로 주요기능 실행 ##########
 
 alias aws-cli="aws --version | cut -d ' ' -f1 "
 alias aws-list="cat ~/.aws/credentials | grep -o '\[[^]]*\]' | grep -Ev 'default' "
@@ -114,17 +130,17 @@ alias aws-set="aws_set $1"
 alias aws-clear="aws_clear; aws_profile; "
 alias aws-sts="aws sts get-caller-identity"
 
-aws_set ${DEFAULT_PF} ;
-
-############### END ################################################
+ex> aws-set or aws-key or aws-clear or aws-cli 등등 ... 
 
 ```
 
-### First SETUP 시 Default profile 설정:
+##################################################
+### REF> First SETUP, DEFAULT PROFILE 설정:
 step1: 
-아래 이미지 처럼 쉘 환경파일 로딩 후, 사전에 설정된 프로파일 중 원하는 걸로 선택~!
+아래 이미지 처럼 쉘 환경파일 로딩 후, DEFAULT PROFILE 미설정시 사전에 설정된 프로파일 중 원하는 걸로 선택~!
 
 > source ~/.bashrc OR source ~/.zshrc
+> 참고로 ~/dft.txt 에 DEFAULT PROFILE 값 저장
 
 step2: 
 aws-key cmd 통해 설정된 프로파일 정보 확인
