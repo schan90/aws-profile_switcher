@@ -65,6 +65,9 @@ AWS-CLI V2 profile 환경변수 및 set command & ETC ...
 
   3rd $> echo 'source ~/.aws-pf-swtchr.sh ;' >> ~/.bashrc 
     OR echo 'source ~/.aws-pf-swtchr.sh ;' >> ~/.zshrc
+  
+  4th $> echo 'cp ~/.aws/config ~/.aws/config_bk ;' >> ~/.bashrc 
+    OR $> echo 'cp ~/.aws/config ~/.aws/config_bk ;' >> ~/.zshrc
 
 ### step5. restart shell 
   ex) source ~/.bashrc OR source ~/.zshrc
