@@ -72,6 +72,11 @@ AWS-CLI V2 profile 환경변수 및 set command & ETC ...
 ### step5. restart shell 
   ex) source ~/.bashrc OR source ~/.zshrc
 
+
+REF. 트러블 슈팅
+  간혹 vscode 플러그인 충돌이나 기타의 이유로 profile parse 오류 발생시 ~/.aws/config_bk 를 config 파일로 원복 후
+  ~/.aws/credentials 파일의 프로파일과 비교하여 config 파일 내 중복되거나 매칭되지 않는 값 삭제 후 쉘 재실행하여 해결
+
 ```
 ## RELEASE-HISTORY  :
 
