@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ######################
-swtr_ver="v1.3.7"
+swtr_ver="v1.3.8"
 ######################
 
 pathF="$HOME/.aws"

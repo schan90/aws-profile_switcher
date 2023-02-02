@@ -50,32 +50,36 @@ AWS-CLI V2 profile 환경변수 및 set command & ETC ...
   ex> git clone <git-source>
 
 ### step2. backup aws config file
-  ex> cp ~/.aws/config ~/.aws/config-bk
+  ex> cp ~/.aws/config ~/.aws/config_bk_orign
 
 ### step3. give exec & write permission & copy this script to your path 
   1st $> chmod 755 .aws-pf-swtchr.sh && chmod 755 awscf_reset.sh 
   2nd $> cp awscf_reset.sh ~/.aws/awscf_reset.sh && cp .aws-pf-swtchr.sh ~/.aws-pf-swtchr.sh 
 
-### step4. loading script in bashrc or zshrc 
-  1st $> echo 'pushd ~/.aws > /dev/null && { command -- ./awscf_reset.sh ;} ;' >> ~/.bashrc 
+### step4. shell ENV setting & loading script in bashrc or zshrc 
+  1st $> echo 'cp ~/.aws/config_bk_orign ~/.aws/config  ;' >> ~/.bashrc
+    OR echo 'cp ~/.aws/config_bk_orign ~/.aws/config  ;' >> ~/.zshrc
+  
+  2nd $> echo 'pushd ~/.aws > /dev/null && { command -- ./awscf_reset.sh ;} ;' >> ~/.bashrc 
     OR echo 'pushd ~/.aws > /dev/null && { command -- ./awscf_reset.sh ;} ;' >> ~/.zshrc
 
-  2nd $> echo 'popd > /dev/null 2> /dev/null ;' >> ~/.bashrc 
+  3rd $> echo 'popd > /dev/null 2> /dev/null ;' >> ~/.bashrc 
     OR echo 'popd > /dev/null 2> /dev/null ;' >> ~/.zshrc
 
-  3rd $> echo 'source ~/.aws-pf-swtchr.sh ;' >> ~/.bashrc 
-    OR echo 'source ~/.aws-pf-swtchr.sh ;' >> ~/.zshrc
-  
-  4th $> echo 'cp ~/.aws/config ~/.aws/config_bk ;' >> ~/.bashrc 
+  3rd $> echo 'cp ~/.aws/config ~/.aws/config_bk ;' >> ~/.bashrc 
     OR $> echo 'cp ~/.aws/config ~/.aws/config_bk ;' >> ~/.zshrc
+
+  4th $> echo 'source ~/.aws-pf-swtchr.sh ;' >> ~/.bashrc 
+    OR echo 'source ~/.aws-pf-swtchr.sh ;' >> ~/.zshrc
+
 
 ### step5. restart shell 
   ex) source ~/.bashrc OR source ~/.zshrc
 
 
 REF. 트러블 슈팅
-  간혹 vscode 플러그인 충돌이나 기타의 이유로 profile parse 오류 발생시 ~/.aws/config_bk 를 config 파일로 원복 후
-  ~/.aws/credentials 파일의 프로파일과 비교하여 config 파일 내 중복되거나 매칭되지 않는 값 삭제 후 쉘 재실행하여 해결
+ 간혹 vscode 플러그인 또는 쉘복원 기능 충돌 및 기타의 이유로 config 파일 내 값중복 또는 credential 매칭 문제로 
+ profile parse 오류 발생시 쉘 재실행 후에도 해결되지 않을 경우 ~/.aws/config_bk 를 config 파일로 원복하여 쉘 재실행하여 해결
 
 ```
 ## RELEASE-HISTORY  :
